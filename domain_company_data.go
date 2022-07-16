@@ -9,11 +9,12 @@ import (
 
 type CompanyData struct {
 	gorm.Model
-	Code    string
-	Name    string
-	Country string
-	Website string
-	Phone   string // for supporting +40 type
+
+	Code    string `json:"code"`
+	Name    string `json:"name"`
+	Country string `json:"country"`
+	Website string `json:"website"`
+	Phone   string `json:"phone"` // for supporting +40 type
 }
 
 var errRecordNotFound = errors.New("record not found")
@@ -36,6 +37,8 @@ func NewCompanyData(code, name, country, website, phone string) (*CompanyData, e
 
 func (c CompanyData) IsValid() error {
 	// TODO: logic
+
+	fmt.Printf("%#v", c)
 
 	return nil
 }

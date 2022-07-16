@@ -33,8 +33,10 @@ func NewCompanyEmpty(repo *RepoCompany) (*Company, error) {
 	}, nil
 }
 
-func (c *Company) RepoNewCompany() {
+func (c *Company) RepoNewCompany() int {
 	c.repo.DBConn.Create(c.CompanyData)
+
+	return int(c.CompanyData.ID)
 }
 
 func (c *Company) RepoGetCompany(id uint) (*CompanyData, error) {
@@ -59,4 +61,12 @@ func (c *Company) RepoDeleteCompany(id uint) error {
 	}
 
 	return errRecordNotFound
+}
+
+func (c *Company) RepoGetCompanies() []CompanyData {
+	var res []CompanyData
+
+	c.repo.DBConn.Find(&res)
+
+	return res
 }

@@ -38,14 +38,15 @@ func (s *ServerFiber) Stop() {
 	}
 }
 
+// handleNewCompany is handler for addition.
+// manual testing: curl -X POST -H "Content-Type: application/json" --data "{\"code\": \"J1234\", \"name\": \"avata\", \"country\": \"Fidji\", \"website\": \"avata.fj\", \"phone\": \"+55 12345\"}" http://localhost:3000/api/v1/company
+// manual testing: curl -X POST -H "Content-Type: application/json" --data "{\"code\": \"J5678\", \"name\": \"tommy\", \"country\": \"Tokelau\", \"website\": \"tommy.tk\", \"phone\": \"+25 5678\"}" http://localhost:3000/api/v1/company
 func (s *ServerFiber) handleNewCompany() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		data := CompanyData{
-			Code:    "xyz",
-			Name:    "Ltd",
-			Country: "UK",
-			Website: "dice.com",
-			Phone:   "+40 123 456",
+		var data CompanyData
+
+		if errBody := c.BodyParser(&data); errBody != nil {
+			return c.Status(http.StatusBadRequest).Send([]byte(errBody.Error() + "\n"))
 		}
 
 		if errValid := data.IsValid(); errValid != nil {
@@ -57,9 +58,7 @@ func (s *ServerFiber) handleNewCompany() fiber.Handler {
 			return c.Status(http.StatusBadRequest).Send([]byte(errNew.Error() + "\n"))
 		}
 
-		company.RepoNewCompany()
-
-		return c.SendStatus(http.StatusOK)
+		return c.Status(http.StatusBadRequest).Send([]byte(strconv.Itoa(company.RepoNewCompany()) + "\n"))
 	}
 }
 
@@ -91,10 +90,14 @@ func (s *ServerFiber) handleGetCompany() fiber.Handler {
 
 func (s *ServerFiber) handleGetCompanies() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		body := string(c.Body())
-		fmt.Println("request body: ", body)
+		company, errNew := NewCompanyEmpty(s.repo)
+		if errNew != nil {
+			return c.Status(http.StatusInternalServerError).Send([]byte(errNew.Error() + "\n"))
+		}
 
-		return c.SendStatus(http.StatusOK)
+		data := company.RepoGetCompanies()
+
+		return c.JSON(data)
 	}
 }
 

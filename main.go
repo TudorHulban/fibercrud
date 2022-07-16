@@ -6,6 +6,8 @@ import (
 )
 
 func main() {
+	os.Remove(_repoDBSQLite)
+
 	repo, errNew := NewRepoCompany()
 	if errNew != nil {
 		fmt.Printf("NewRepoCompany: %s", errNew.Error())

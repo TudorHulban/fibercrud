@@ -1,4 +1,24 @@
+## How To
+Add company:
+```sh
+curl -X POST -H "Content-Type: application/json" --data "{\"code\": \"J1234\", \"name\": \"avata\", \"country\": \"Fidji\", \"website\": \"avata.fj\", \"phone\": \"+55 12345\"}" http://localhost:3000/api/v1/company
+```
+Get company with ID = 1:
+```sh
+curl http://localhost:3000/api/v1/company/1
+```
+Get all companies:
+```sh
+curl http://localhost:3000/api/v1/company/
+```
+Delete company with ID = 1:
+```sh
+curl -X DELETE http://localhost:3000/api/v1/company/1
+```
+
+
 ## Leftovers
+### Move database operations to context
 ### Setup golangci linter
 ### Check or improve the memory allignment of structs
 ### Move database connection as singleton
@@ -12,6 +32,7 @@
 ### Assess for SQL injection
 ### Move to constants error messages
 ### Less Code duplication
+### Context timeout for IP service
 
 
 ## Resources
