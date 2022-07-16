@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -10,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const dataCreate = "{\"code\": \"J1234\", \"name\": \"avata\", \"country\": \"Fidji\", \"website\": \"avata.fj\", \"phone\": \"+55 12345\"}"
+const dataCreate = `{"code":"J1234","name":"avata","country":"Fidji","website":"avata.fj","phone":"+55 12345"}`
 
 func TestFiber(t *testing.T) {
 	initialization()
@@ -31,5 +32,5 @@ func TestFiber(t *testing.T) {
 
 	resp, err = fiber.app.Test(httptest.NewRequest(http.MethodPost, _route, strings.NewReader(dataCreate)))
 	utils.AssertEqual(t, nil, err)
-	utils.AssertEqual(t, 200, resp.StatusCode)
+	utils.AssertEqual(t, 200, resp.StatusCode, fmt.Sprintf("req body: %s", resp.Body))
 }

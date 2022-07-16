@@ -46,18 +46,22 @@ func (s *ServerFiber) handleNewCompany() fiber.Handler {
 		var data CompanyData
 
 		if errBody := c.BodyParser(&data); errBody != nil {
+			fmt.Println("11111111")
 			return c.Status(http.StatusBadRequest).SendString(errBody.Error() + "\n")
 		}
 
 		if errValid := data.IsValid(); errValid != nil {
+			fmt.Println("222222")
 			return c.Status(http.StatusBadRequest).SendString(errValid.Error() + "\n")
 		}
 
 		company, errNew := NewCompany(&data, s.repo)
 		if errNew != nil {
+			fmt.Println("333333")
 			return c.Status(http.StatusBadRequest).SendString(errNew.Error() + "\n")
 		}
 
+		fmt.Println("444444")
 		return c.Status(http.StatusBadRequest).SendString(strconv.Itoa(company.RepoNewCompany()) + "\n")
 	}
 }
