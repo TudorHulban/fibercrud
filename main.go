@@ -5,9 +5,11 @@ import (
 	"os"
 )
 
-func main() {
+func initialization() {
 	os.Remove(_repoDBSQLite)
+}
 
+func main() {
 	repo, errNew := NewRepoCompany()
 	if errNew != nil {
 		fmt.Printf("NewRepoCompany: %s", errNew.Error())

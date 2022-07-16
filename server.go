@@ -46,19 +46,19 @@ func (s *ServerFiber) handleNewCompany() fiber.Handler {
 		var data CompanyData
 
 		if errBody := c.BodyParser(&data); errBody != nil {
-			return c.Status(http.StatusBadRequest).Send([]byte(errBody.Error() + "\n"))
+			return c.Status(http.StatusBadRequest).SendString(errBody.Error() + "\n")
 		}
 
 		if errValid := data.IsValid(); errValid != nil {
-			return c.Status(http.StatusBadRequest).Send([]byte(errValid.Error() + "\n"))
+			return c.Status(http.StatusBadRequest).SendString(errValid.Error() + "\n")
 		}
 
 		company, errNew := NewCompany(&data, s.repo)
 		if errNew != nil {
-			return c.Status(http.StatusBadRequest).Send([]byte(errNew.Error() + "\n"))
+			return c.Status(http.StatusBadRequest).SendString(errNew.Error() + "\n")
 		}
 
-		return c.Status(http.StatusBadRequest).Send([]byte(strconv.Itoa(company.RepoNewCompany()) + "\n"))
+		return c.Status(http.StatusBadRequest).SendString(strconv.Itoa(company.RepoNewCompany()) + "\n")
 	}
 }
 
@@ -67,21 +67,21 @@ func (s *ServerFiber) handleGetCompany() fiber.Handler {
 		idRequest := c.Params("id")
 		idCompany, errReq := strconv.Atoi(idRequest)
 		if errReq != nil {
-			return c.Status(http.StatusBadRequest).Send([]byte(errReq.Error() + "\n"))
+			return c.Status(http.StatusBadRequest).SendString(errReq.Error() + "\n")
 		}
 
 		if idCompany < 1 {
-			return c.Status(http.StatusBadRequest).Send([]byte("company ID should at least 1" + "\n"))
+			return c.Status(http.StatusBadRequest).SendString("company ID should at least 1" + "\n")
 		}
 
 		company, errNew := NewCompanyEmpty(s.repo)
 		if errNew != nil {
-			return c.Status(http.StatusInternalServerError).Send([]byte(errNew.Error() + "\n"))
+			return c.Status(http.StatusInternalServerError).SendString(errNew.Error() + "\n")
 		}
 
 		data, errGet := company.RepoGetCompany(uint(idCompany))
 		if errGet != nil {
-			return c.Status(http.StatusNotFound).Send([]byte(errGet.Error() + "\n"))
+			return c.Status(http.StatusNotFound).SendString(errGet.Error() + "\n")
 		}
 
 		return c.JSON(data)
@@ -92,7 +92,7 @@ func (s *ServerFiber) handleGetCompanies() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		company, errNew := NewCompanyEmpty(s.repo)
 		if errNew != nil {
-			return c.Status(http.StatusInternalServerError).Send([]byte(errNew.Error() + "\n"))
+			return c.Status(http.StatusInternalServerError).SendString(errNew.Error() + "\n")
 		}
 
 		data := company.RepoGetCompanies()
@@ -103,10 +103,22 @@ func (s *ServerFiber) handleGetCompanies() fiber.Handler {
 
 func (s *ServerFiber) handleUpdateCompany() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		body := string(c.Body())
-		fmt.Println("request body: ", body)
+		var data CompanyData
 
-		return c.SendStatus(http.StatusOK)
+		if errBody := c.BodyParser(&data); errBody != nil {
+			return c.Status(http.StatusBadRequest).SendString(errBody.Error() + "\n")
+		}
+
+		if errValid := data.IsValid(); errValid != nil {
+			return c.Status(http.StatusBadRequest).SendString(errValid.Error() + "\n")
+		}
+
+		company, errNew := NewCompany(&data, s.repo)
+		if errNew != nil {
+			return c.Status(http.StatusBadRequest).SendString(errNew.Error() + "\n")
+		}
+
+		return c.Status(http.StatusBadRequest).SendString(company.RepoUpdateCompany().Error() + "\n")
 	}
 }
 
@@ -115,21 +127,21 @@ func (s *ServerFiber) handleDeleteCompany() fiber.Handler {
 		idRequest := c.Params("id")
 		idCompany, errReq := strconv.Atoi(idRequest)
 		if errReq != nil {
-			return c.Status(http.StatusBadRequest).Send([]byte(errReq.Error() + "\n"))
+			return c.Status(http.StatusBadRequest).SendString(errReq.Error() + "\n")
 		}
 
 		if idCompany < 1 {
-			return c.Status(http.StatusBadRequest).Send([]byte("company ID should at least 1" + "\n"))
+			return c.Status(http.StatusBadRequest).SendString("company ID should at least 1" + "\n")
 		}
 
 		company, errNew := NewCompanyEmpty(s.repo)
 		if errNew != nil {
-			return c.Status(http.StatusInternalServerError).Send([]byte(errNew.Error() + "\n"))
+			return c.Status(http.StatusInternalServerError).SendString(errNew.Error() + "\n")
 		}
 
 		errDel := company.RepoDeleteCompany(uint(idCompany))
 		if errDel != nil {
-			return c.Status(http.StatusOK).Send([]byte(errDel.Error() + "\n"))
+			return c.Status(http.StatusOK).SendString(errDel.Error() + "\n")
 		}
 
 		return c.SendStatus(http.StatusNoContent)

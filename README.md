@@ -11,6 +11,14 @@ Get all companies:
 ```sh
 curl http://localhost:3000/api/v1/company/
 ```
+Update company with ID = 1, change in field code:
+```sh
+curl -X PUT -H "Content-Type: application/json" --data "{\"id\": 1,\"code\": \"Jxxxx\", \"name\": \"avata\", \"country\": \"Fidji\", \"website\": \"avata.fj\", \"phone\": \"+55 12345\"}" http://localhost:3000/api/v1/company
+```
+See also: 
+```html
+https://stackoverflow.com/questions/39333102/how-to-create-or-update-a-record-with-gorm
+```
 Delete company with ID = 1:
 ```sh
 curl -X DELETE http://localhost:3000/api/v1/company/1
@@ -19,6 +27,8 @@ curl -X DELETE http://localhost:3000/api/v1/company/1
 
 ## Leftovers
 ### Move database operations to context
+### Improve error handling
+example: send same creation twice
 ### Setup golangci linter
 ### Check or improve the memory allignment of structs
 ### Move database connection as singleton
@@ -32,7 +42,13 @@ curl -X DELETE http://localhost:3000/api/v1/company/1
 ### Assess for SQL injection
 ### Move to constants error messages
 ### Less Code duplication
+### IP service
+see:
+```html
+https://github.com/gofiber/recipes/tree/master/geoip
+```
 ### Context timeout for IP service
+### Fiber protection middlewares
 
 
 ## Resources

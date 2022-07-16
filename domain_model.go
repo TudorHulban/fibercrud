@@ -1,6 +1,9 @@
 package main
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type Company struct {
 	*CompanyData
@@ -69,4 +72,20 @@ func (c *Company) RepoGetCompanies() []CompanyData {
 	c.repo.DBConn.Find(&res)
 
 	return res
+}
+
+// RepoUpdateCompany should update the entity.
+// TODO: does not work
+func (c *Company) RepoUpdateCompany() error {
+	fmt.Println("")
+
+	fmt.Printf("RepoUpdateCompany:\n%#v\n", *c.CompanyData)
+
+	rows := c.repo.DBConn.Model(c.CompanyData).Where("id = ?", c.CompanyData.ID).Updates(c.CompanyData).RowsAffected
+
+	if rows == 1 {
+		return nil
+	}
+
+	return errRecordNotFound
 }

@@ -38,7 +38,7 @@ func NewCompanyData(code, name, country, website, phone string) (*CompanyData, e
 func (c CompanyData) IsValid() error {
 	// TODO: logic
 
-	fmt.Printf("%#v", c)
+	fmt.Printf("%#v\n", c)
 
 	return nil
 }
