@@ -36,13 +36,13 @@ func NewCompanyEmpty(repo *RepoCompany) (*Company, error) {
 	}, nil
 }
 
-func (c *Company) RepoNewCompany() int {
-	c.repo.DBConn.Create(c.CompanyData)
+func (c *Company) RepoNewCompany() (int, error) {
+	errInsert := c.repo.DBConn.Create(c.CompanyData).Error
 
-	return int(c.CompanyData.ID)
+	return int(c.CompanyData.ID), errInsert
 }
 
-func (c *Company) RepoGetCompany(id uint) (*CompanyData, error) {
+func (c *Company) RepoGetCompanyByID(id uint) (*CompanyData, error) {
 	var res CompanyData
 
 	rows := c.repo.DBConn.First(&res, id).RowsAffected
@@ -66,22 +66,21 @@ func (c *Company) RepoDeleteCompany(id uint) error {
 	return errRecordNotFound
 }
 
-func (c *Company) RepoGetCompanies() []CompanyData {
+func (c *Company) RepoGetCompanies() ([]CompanyData, error) {
 	var res []CompanyData
 
-	c.repo.DBConn.Find(&res)
+	errSelect := c.repo.DBConn.Find(&res).Error
 
-	return res
+	return res, errSelect
 }
 
 // RepoUpdateCompany should update the entity.
-// TODO: does not work
 func (c *Company) RepoUpdateCompany() error {
 	fmt.Println("")
 
 	fmt.Printf("RepoUpdateCompany:\n%#v\n", *c.CompanyData)
 
-	rows := c.repo.DBConn.Model(c.CompanyData).Where("id = ?", c.CompanyData.ID).Updates(c.CompanyData).RowsAffected
+	rows := c.repo.DBConn.Model(c.CompanyData).Updates(c.CompanyData).RowsAffected
 
 	if rows == 1 {
 		return nil

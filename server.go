@@ -87,9 +87,20 @@ func (s *ServerFiber) handleNewCompany() fiber.Handler {
 			})
 		}
 
+		idInsert, errInsert := company.RepoNewCompany()
+		if errInsert != nil {
+			return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+				"success": false,
+				"error":   errInsert.Error(),
+			})
+		}
+
 		go s.publisher.PublishEvent(&company)
 
-		return c.Status(http.StatusOK).SendString(strconv.Itoa(company.RepoNewCompany()) + "\n")
+		return c.Status(http.StatusOK).JSON(&fiber.Map{
+			"success": true,
+			"id":      idInsert,
+		})
 	}
 }
 
@@ -119,7 +130,7 @@ func (s *ServerFiber) handleGetCompany() fiber.Handler {
 			})
 		}
 
-		data, errGet := company.RepoGetCompany(uint(idCompany))
+		data, errGet := company.RepoGetCompanyByID(uint(idCompany))
 		if errGet != nil {
 			return c.Status(http.StatusNotFound).JSON(&fiber.Map{
 				"success": false,
@@ -144,9 +155,18 @@ func (s *ServerFiber) handleGetCompanies() fiber.Handler {
 			})
 		}
 
-		data := company.RepoGetCompanies()
+		data, errSelect := company.RepoGetCompanies()
+		if errSelect != nil {
+			return c.Status(http.StatusNotFound).JSON(&fiber.Map{
+				"success": false,
+				"error":   errSelect.Error(),
+			})
+		}
 
-		return c.JSON(data)
+		return c.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"success":   true,
+			"companies": data,
+		})
 	}
 }
 
