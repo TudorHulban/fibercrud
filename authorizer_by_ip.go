@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -8,16 +9,32 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-type AuthorizerByIP struct{}
+type AuthorizerByIP struct {
+	urlService string
+}
 
 const (
-	_urlService   = "https://ipapi.co/"
+	_urlIPApi     = "https://ipapi.co"
 	_routeService = "/json"
 )
 
 const _authorizedISO = "CYP"
 
+var errCorruptedResponse = errors.New("response is corrupted")
+
 var _ Authorizer = &AuthorizerByIP{}
+
+func newAuthorizerByIP(urlService string) *AuthorizerByIP {
+	return &AuthorizerByIP{
+		urlService: urlService,
+	}
+}
+
+func NewAuthorizerByIPApi() *AuthorizerByIP {
+	return &AuthorizerByIP{
+		urlService: _urlIPApi,
+	}
+}
 
 func (AuthorizerByIP) isValidIP(_ string) error {
 	// TODO: logic
@@ -34,7 +51,7 @@ func (a AuthorizerByIP) IsAuthorized(ip any) (bool, error) {
 		return false, errValid
 	}
 
-	urlRequest := _urlService + ipRequest + _routeService
+	urlRequest := a.urlService + "/" + ipRequest + _routeService
 
 	resp, errGet := http.Get(urlRequest)
 	if errGet != nil {
@@ -46,6 +63,10 @@ func (a AuthorizerByIP) IsAuthorized(ip any) (bool, error) {
 	body, errRead := ioutil.ReadAll(resp.Body)
 	if errRead != nil {
 		return false, errGet
+	}
+
+	if len(body) == 0 {
+		return false, fmt.Errorf("IP location service: %w", errCorruptedResponse)
 	}
 
 	iso3 := gjson.Get(string(body), "country_code_iso3").String()

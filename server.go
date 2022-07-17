@@ -43,6 +43,23 @@ func (s *ServerFiber) Stop() {
 // manual testing: curl -X POST -H "Content-Type: application/json" --data "{\"code\": \"J5678\", \"name\": \"tommy\", \"country\": \"Tokelau\", \"website\": \"tommy.tk\", \"phone\": \"+25 5678\"}" http://localhost:3000/api/v1/company
 func (s *ServerFiber) handleNewCompany() fiber.Handler {
 	return func(c *fiber.Ctx) error {
+		if !c.IsFromLocal() {
+			auth := NewAuthorizerByIPApi()
+			isAuthorized, errAuth := auth.IsAuthorized(c.IP())
+			if errAuth != nil {
+				return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+					"success": false,
+					"error":   errAuth.Error(),
+				})
+			}
+
+			if !isAuthorized {
+				return c.Status(http.StatusForbidden).JSON(&fiber.Map{
+					"success": false,
+				})
+			}
+		}
+
 		var data CompanyData
 
 		if errBody := c.BodyParser(&data); errBody != nil {
@@ -105,8 +122,6 @@ func (s *ServerFiber) handleGetCompany() fiber.Handler {
 			})
 		}
 
-		// return c.JSON(data)
-
 		return c.Status(http.StatusOK).JSON(&fiber.Map{
 			"success": true,
 			"company": data,
@@ -132,6 +147,23 @@ func (s *ServerFiber) handleGetCompanies() fiber.Handler {
 
 func (s *ServerFiber) handleUpdateCompany() fiber.Handler {
 	return func(c *fiber.Ctx) error {
+		if !c.IsFromLocal() {
+			auth := NewAuthorizerByIPApi()
+			isAuthorized, errAuth := auth.IsAuthorized(c.IP())
+			if errAuth != nil {
+				return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+					"success": false,
+					"error":   errAuth.Error(),
+				})
+			}
+
+			if !isAuthorized {
+				return c.Status(http.StatusForbidden).JSON(&fiber.Map{
+					"success": false,
+				})
+			}
+		}
+
 		var data CompanyData
 
 		if errBody := c.BodyParser(&data); errBody != nil {
