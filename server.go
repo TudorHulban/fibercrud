@@ -9,6 +9,8 @@ import (
 )
 
 type ServerFiber struct {
+	publisher Publisher
+
 	app  *fiber.App
 	repo *RepoCompany
 
@@ -18,9 +20,10 @@ type ServerFiber struct {
 
 func NewFiber(portListening uint, repo *RepoCompany) *ServerFiber {
 	return &ServerFiber{
-		app:  fiber.New(),
-		repo: repo,
-		port: portListening,
+		app:       fiber.New(),
+		repo:      repo,
+		publisher: NewPublisherToKafka(),
+		port:      portListening,
 	}
 }
 
@@ -83,6 +86,8 @@ func (s *ServerFiber) handleNewCompany() fiber.Handler {
 				"error":   errNew.Error(),
 			})
 		}
+
+		go s.publisher.PublishEvent(&company)
 
 		return c.Status(http.StatusOK).SendString(strconv.Itoa(company.RepoNewCompany()) + "\n")
 	}
@@ -187,6 +192,8 @@ func (s *ServerFiber) handleUpdateCompany() fiber.Handler {
 				"error":   errNew.Error(),
 			})
 		}
+
+		go s.publisher.PublishEvent(&company)
 
 		return c.Status(http.StatusOK).SendString(company.RepoUpdateCompany().Error() + "\n")
 	}

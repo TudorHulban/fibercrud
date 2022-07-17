@@ -5,6 +5,5 @@ type Authorizer interface {
 }
 
 type Publisher interface {
-	CreateEvent(any) error
-	PublishEvent(any) error
+	PublishEvent(data any)
 }
