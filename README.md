@@ -43,6 +43,14 @@ example: send same creation twice
 ### Move to constants error messages
 ### Less Code duplication
 ### IP service
+Received:
+```json
+{
+    "error": true,
+    "reason": "RateLimited",
+    "message": "Visit https://ipapi.co/ratelimited/ for details"
+}
+```
 see:
 ```html
 https://github.com/gofiber/recipes/tree/master/geoip

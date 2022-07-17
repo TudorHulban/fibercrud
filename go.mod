@@ -6,6 +6,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.35.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/stretchr/testify v1.8.0
+	github.com/tidwall/gjson v1.14.1
 )
 
 require (
@@ -15,6 +16,8 @@ require (
 	github.com/klauspost/compress v1.15.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.38.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
