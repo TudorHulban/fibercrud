@@ -33,11 +33,9 @@ curl -X DELETE http://localhost:3000/api/v1/company/1
 
 
 ## Leftovers
-### Unit test for entity verification on GET
 ### Move database operations to context
 ### Improve error handling
 example: send same creation twice
-### Setup golangci linter
 ### Check or improve the memory allignment of structs
 ### Move database connection as singleton
 ### Configuration load

@@ -11,7 +11,7 @@ type RepoCompany struct {
 	DBConn *gorm.DB
 }
 
-const RepoDBSQLite = "../companies.db"
+const RepoDBSQLite = "../../companies.db"
 
 func NewRepoCompany() (*RepoCompany, error) {
 	dbConn, errOpen := gorm.Open("sqlite3", RepoDBSQLite)
