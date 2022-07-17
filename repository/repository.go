@@ -1,4 +1,4 @@
-package main
+package repo
 
 import (
 	"fmt"
@@ -11,8 +11,10 @@ type RepoCompany struct {
 	DBConn *gorm.DB
 }
 
+const RepoDBSQLite = "../companies.db"
+
 func NewRepoCompany() (*RepoCompany, error) {
-	dbConn, errOpen := gorm.Open("sqlite3", _repoDBSQLite)
+	dbConn, errOpen := gorm.Open("sqlite3", RepoDBSQLite)
 	if errOpen != nil {
 		return nil, fmt.Errorf("NewRepoCompany gorm.Open: %w", errOpen)
 	}

@@ -1,8 +1,10 @@
-package main
+package pubk
+
+import "fibercrud/infra"
 
 type PublisherToKafka struct{}
 
-var _ Publisher = &PublisherToKafka{}
+var _ infra.Publisher = &PublisherToKafka{}
 
 func NewPublisherToKafka() *PublisherToKafka {
 	return &PublisherToKafka{}

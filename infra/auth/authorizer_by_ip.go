@@ -1,7 +1,8 @@
-package main
+package auth
 
 import (
 	"errors"
+	"fibercrud/infra"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -22,7 +23,7 @@ const _authorizedISO = "CYP"
 
 var errCorruptedResponse = errors.New("response is corrupted")
 
-var _ Authorizer = &AuthorizerByIP{}
+var _ infra.Authorizer = &AuthorizerByIP{}
 
 func newAuthorizerByIP(urlService string) *AuthorizerByIP {
 	return &AuthorizerByIP{

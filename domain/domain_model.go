@@ -1,17 +1,18 @@
-package main
+package domain
 
 import (
 	"errors"
+	repo "fibercrud/repository"
 	"fmt"
 )
 
 type Company struct {
 	*CompanyData
 
-	repo *RepoCompany
+	repo *repo.RepoCompany
 }
 
-func NewCompany(data *CompanyData, repo *RepoCompany) (*Company, error) {
+func NewCompany(data *CompanyData, repo *repo.RepoCompany) (*Company, error) {
 	if data == nil {
 		return nil, errors.New("passed data is nil")
 	}
@@ -26,7 +27,7 @@ func NewCompany(data *CompanyData, repo *RepoCompany) (*Company, error) {
 	}, nil
 }
 
-func NewCompanyEmpty(repo *RepoCompany) (*Company, error) {
+func NewCompanyEmpty(repo *repo.RepoCompany) (*Company, error) {
 	if repo == nil {
 		return nil, errors.New("passed repo is nil")
 	}

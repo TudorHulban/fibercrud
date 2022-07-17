@@ -1,6 +1,11 @@
-package main
+package rest
 
 import (
+	"fibercrud/domain"
+	"fibercrud/infra"
+	"fibercrud/infra/auth"
+	"fibercrud/infra/pubk"
+	repo "fibercrud/repository"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -9,21 +14,26 @@ import (
 )
 
 type ServerFiber struct {
-	publisher Publisher
+	publisher infra.Publisher
 
 	app  *fiber.App
-	repo *RepoCompany
+	repo *repo.RepoCompany
 
 	errShutdown error
 	port        uint
 }
 
-func NewFiber(portListening uint, repo *RepoCompany) *ServerFiber {
+const (
+	_portFiber = 3000
+	_route     = "/api/v1/company"
+)
+
+func NewFiber(repo *repo.RepoCompany) *ServerFiber {
 	return &ServerFiber{
 		app:       fiber.New(),
 		repo:      repo,
-		publisher: NewPublisherToKafka(),
-		port:      portListening,
+		publisher: pubk.NewPublisherToKafka(),
+		port:      _portFiber,
 	}
 }
 
@@ -47,7 +57,7 @@ func (s *ServerFiber) Stop() {
 func (s *ServerFiber) handleNewCompany() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		if !c.IsFromLocal() {
-			auth := NewAuthorizerByIPApi()
+			auth := auth.NewAuthorizerByIPApi()
 			isAuthorized, errAuth := auth.IsAuthorized(c.IP())
 			if errAuth != nil {
 				return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
@@ -63,7 +73,7 @@ func (s *ServerFiber) handleNewCompany() fiber.Handler {
 			}
 		}
 
-		var data CompanyData
+		var data domain.CompanyData
 
 		if errBody := c.BodyParser(&data); errBody != nil {
 			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
@@ -79,7 +89,7 @@ func (s *ServerFiber) handleNewCompany() fiber.Handler {
 			})
 		}
 
-		company, errNew := NewCompany(&data, s.repo)
+		company, errNew := domain.NewCompany(&data, s.repo)
 		if errNew != nil {
 			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
 				"success": false,
@@ -122,7 +132,7 @@ func (s *ServerFiber) handleGetCompany() fiber.Handler {
 			})
 		}
 
-		company, errNew := NewCompanyEmpty(s.repo)
+		company, errNew := domain.NewCompanyEmpty(s.repo)
 		if errNew != nil {
 			return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
 				"success": false,
@@ -147,7 +157,7 @@ func (s *ServerFiber) handleGetCompany() fiber.Handler {
 
 func (s *ServerFiber) handleGetCompanies() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		company, errNew := NewCompanyEmpty(s.repo)
+		company, errNew := domain.NewCompanyEmpty(s.repo)
 		if errNew != nil {
 			return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
 				"success": false,
@@ -173,7 +183,7 @@ func (s *ServerFiber) handleGetCompanies() fiber.Handler {
 func (s *ServerFiber) handleUpdateCompany() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		if !c.IsFromLocal() {
-			auth := NewAuthorizerByIPApi()
+			auth := auth.NewAuthorizerByIPApi()
 			isAuthorized, errAuth := auth.IsAuthorized(c.IP())
 			if errAuth != nil {
 				return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
@@ -189,7 +199,7 @@ func (s *ServerFiber) handleUpdateCompany() fiber.Handler {
 			}
 		}
 
-		var data CompanyData
+		var data domain.CompanyData
 
 		if errBody := c.BodyParser(&data); errBody != nil {
 			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
@@ -205,7 +215,7 @@ func (s *ServerFiber) handleUpdateCompany() fiber.Handler {
 			})
 		}
 
-		company, errNew := NewCompany(&data, s.repo)
+		company, errNew := domain.NewCompany(&data, s.repo)
 		if errNew != nil {
 			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
 				"success": false,
@@ -237,7 +247,7 @@ func (s *ServerFiber) handleDeleteCompany() fiber.Handler {
 			})
 		}
 
-		company, errNew := NewCompanyEmpty(s.repo)
+		company, errNew := domain.NewCompanyEmpty(s.repo)
 		if errNew != nil {
 			return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
 				"success": false,

@@ -1,6 +1,9 @@
-package main
+package rest
 
 import (
+	"fibercrud/domain"
+	"fibercrud/infra"
+	repo "fibercrud/repository"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -13,16 +16,16 @@ import (
 const dataCreate = `{"code":"J1234","name":"avata","country":"Fidji","website":"avata.fj","phone":"+55 12345"}`
 
 func TestFiber(t *testing.T) {
-	initialization()
+	infra.Initialization()
 
 	require := require.New(t)
 
-	repo, errNew := NewRepoCompany()
+	repo, errNew := repo.NewRepoCompany()
 	require.NoError(errNew)
 
-	repo.Migration(&CompanyData{})
+	repo.Migration(&domain.CompanyData{})
 
-	fiber := NewFiber(_portFiber, repo)
+	fiber := NewFiber(repo)
 	defer fiber.Stop()
 
 	fiber.addRoutes()

@@ -1,4 +1,4 @@
-package main
+package infra
 
 type Authorizer interface {
 	IsAuthorized(any) (bool, error)
