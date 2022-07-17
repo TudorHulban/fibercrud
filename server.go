@@ -105,7 +105,12 @@ func (s *ServerFiber) handleGetCompany() fiber.Handler {
 			})
 		}
 
-		return c.JSON(data)
+		// return c.JSON(data)
+
+		return c.Status(http.StatusOK).JSON(&fiber.Map{
+			"success": true,
+			"company": data,
+		})
 	}
 }
 

@@ -10,6 +10,8 @@ func initialization() {
 }
 
 func main() {
+	initialization()
+
 	repo, errNew := NewRepoCompany()
 	if errNew != nil {
 		fmt.Printf("NewRepoCompany: %s", errNew.Error())
