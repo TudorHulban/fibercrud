@@ -10,7 +10,6 @@ import (
 	"github.com/TudorHulban/fibercrud/infra/auth"
 	"github.com/TudorHulban/fibercrud/infra/pubk"
 	repo "github.com/TudorHulban/fibercrud/repository"
-
 	"github.com/gofiber/fiber/v2"
 )
 

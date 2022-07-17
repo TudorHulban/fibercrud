@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Jul 17 16:21:22 2022
+# Make data base, printed on Sun Jul 17 17:05:13 2022
 
 # Variables
 
@@ -16,6 +16,8 @@ make: *** No rule to make target 'all'.  Stop.
 GDK_BACKEND = x11
 # environment
 LC_ALL = C
+# environment
+NO_AT_BRIDGE = 1
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
@@ -63,7 +65,7 @@ XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.A3SMP1
 # default
 .INCLUDE_DIRS = /usr/local/include /usr/include /usr/include
 # environment
-GNOME_TERMINAL_SERVICE = :1.3898
+GNOME_TERMINAL_SERVICE = :1.4157
 # makefile
 MAKEFLAGS = pqrR
 # makefile
@@ -123,7 +125,7 @@ XMODIFIERS = @im=ibus
 # environment
 SHLVL = 1
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/88a84e40_f844_45fd_98f6_cf3e6a5c401a
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/35784170_a2ce_4636_90c9_dc75452a4282
 # environment
 MAKELEVEL := 0
 # default
@@ -227,7 +229,7 @@ GDMSESSION = ubuntu
 # environment
 LC_IDENTIFICATION = ro_RO.UTF-8
 # variable set hash-table stats:
-# Load=107/1024=10%, Rehash=0, Collisions=10/137=7%
+# Load=108/1024=11%, Rehash=0, Collisions=10/138=7%
 
 # Pattern-specific Variable Values
 
@@ -235,9 +237,9 @@ LC_IDENTIFICATION = ro_RO.UTF-8
 
 # Directories
 
-# . (device 36, inode 6787): 14 files, no impossibilities.
+# . (device 36, inode 6787): 15 files, no impossibilities.
 
-# 14 files, no impossibilities in 1 directories.
+# 15 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -286,13 +288,13 @@ test:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 21 / storage = 167 B / avg = 7 B
-# current buf: size = 8162 B / used = 167 B / count = 21 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 22 / storage = 181 B / avg = 8 B
+# current buf: size = 8162 B / used = 181 B / count = 22 / avg = 8 B
 
-# strcache performance: lookups = 28 / hit rate = 25%
- 
+# strcache performance: lookups = 29 / hit rate = 24%
 # hash-table stats:
-# Load=21/8192=0%, Rehash=0, Collisions=0/28=0%
-# Finished Make data base on Sun Jul 17 16:21:22 2022
+ 
+# Load=22/8192=0%, Rehash=0, Collisions=0/29=0%
+# Finished Make data base on Sun Jul 17 17:05:13 2022
 
  

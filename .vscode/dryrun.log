@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/mnt/tmpfs.ramdisk/fibercrud'
+go test -failfast -count=1 ./... -json -cover -race | tparse -smallscreen
+make: Leaving directory '/mnt/tmpfs.ramdisk/fibercrud'
+ 

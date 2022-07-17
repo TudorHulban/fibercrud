@@ -12,13 +12,11 @@ func NewPublisherToKafka() *PublisherToKafka {
 
 func (PublisherToKafka) createEvent(any) error {
 	// TODO: logic
-
 	return nil
 }
 
 // no error returned. local error handling.
 func (p *PublisherToKafka) PublishEvent(data any) {
-	p.createEvent(data)
-
+	_ = p.createEvent(data)
 	// TODO: logic
 }

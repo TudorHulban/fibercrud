@@ -39,12 +39,11 @@ func NewAuthorizerByIPApi() *AuthorizerByIP {
 
 func (AuthorizerByIP) isValidIP(_ string) error {
 	// TODO: logic
-
 	return nil
 }
 
 // IsAuthorized returns true if IP from Cyprus using ipapi.co.
-// true for  "country_code_iso3": "CYP",
+// true for  "country_code_iso3": "CYP".
 func (a AuthorizerByIP) IsAuthorized(ip any) (bool, error) {
 	ipRequest := ip.(string)
 
