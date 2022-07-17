@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -26,11 +25,32 @@ func TestFiber(t *testing.T) {
 	fiber := NewFiber(_portFiber, repo)
 	defer fiber.Stop()
 
+	fiber.addRoutes()
+
 	resp, err := fiber.app.Test(httptest.NewRequest(http.MethodGet, _route+"/1", nil))
 	utils.AssertEqual(t, nil, err)
 	utils.AssertEqual(t, 404, resp.StatusCode)
 
-	resp, err = fiber.app.Test(httptest.NewRequest(http.MethodPost, _route, strings.NewReader(dataCreate)))
+	req := httptest.NewRequest(http.MethodPost, _route, strings.NewReader(dataCreate))
+	req.Header.Set("Content-type", "application/json")
+
+	resp, err = fiber.app.Test(req)
 	utils.AssertEqual(t, nil, err)
-	utils.AssertEqual(t, 200, resp.StatusCode, fmt.Sprintf("req body: %s", resp.Body))
+	utils.AssertEqual(t, 200, resp.StatusCode)
+
+	resp, err = fiber.app.Test(httptest.NewRequest(http.MethodGet, _route+"/1", nil))
+	utils.AssertEqual(t, nil, err)
+	utils.AssertEqual(t, 200, resp.StatusCode)
+
+	resp, err = fiber.app.Test(httptest.NewRequest(http.MethodDelete, _route+"/1", nil))
+	utils.AssertEqual(t, nil, err)
+	utils.AssertEqual(t, 200, resp.StatusCode)
+
+	resp, err = fiber.app.Test(httptest.NewRequest(http.MethodGet, _route+"/1", nil))
+	utils.AssertEqual(t, nil, err)
+	utils.AssertEqual(t, 404, resp.StatusCode)
+
+	resp, err = fiber.app.Test(httptest.NewRequest(http.MethodGet, _route+"/-1", nil))
+	utils.AssertEqual(t, nil, err)
+	utils.AssertEqual(t, 400, resp.StatusCode)
 }

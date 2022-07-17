@@ -46,23 +46,28 @@ func (s *ServerFiber) handleNewCompany() fiber.Handler {
 		var data CompanyData
 
 		if errBody := c.BodyParser(&data); errBody != nil {
-			fmt.Println("11111111")
-			return c.Status(http.StatusBadRequest).SendString(errBody.Error() + "\n")
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"success": false,
+				"error":   errBody.Error(),
+			})
 		}
 
 		if errValid := data.IsValid(); errValid != nil {
-			fmt.Println("222222")
-			return c.Status(http.StatusBadRequest).SendString(errValid.Error() + "\n")
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"success": false,
+				"error":   errValid.Error(),
+			})
 		}
 
 		company, errNew := NewCompany(&data, s.repo)
 		if errNew != nil {
-			fmt.Println("333333")
-			return c.Status(http.StatusBadRequest).SendString(errNew.Error() + "\n")
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"success": false,
+				"error":   errNew.Error(),
+			})
 		}
 
-		fmt.Println("444444")
-		return c.Status(http.StatusBadRequest).SendString(strconv.Itoa(company.RepoNewCompany()) + "\n")
+		return c.Status(http.StatusOK).SendString(strconv.Itoa(company.RepoNewCompany()) + "\n")
 	}
 }
 
@@ -71,21 +76,33 @@ func (s *ServerFiber) handleGetCompany() fiber.Handler {
 		idRequest := c.Params("id")
 		idCompany, errReq := strconv.Atoi(idRequest)
 		if errReq != nil {
-			return c.Status(http.StatusBadRequest).SendString(errReq.Error() + "\n")
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"success": false,
+				"error":   errReq.Error(),
+			})
 		}
 
 		if idCompany < 1 {
-			return c.Status(http.StatusBadRequest).SendString("company ID should at least 1" + "\n")
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"success": false,
+				"error":   "company ID should at least 1",
+			})
 		}
 
 		company, errNew := NewCompanyEmpty(s.repo)
 		if errNew != nil {
-			return c.Status(http.StatusInternalServerError).SendString(errNew.Error() + "\n")
+			return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+				"success": false,
+				"error":   errNew.Error(),
+			})
 		}
 
 		data, errGet := company.RepoGetCompany(uint(idCompany))
 		if errGet != nil {
-			return c.Status(http.StatusNotFound).SendString(errGet.Error() + "\n")
+			return c.Status(http.StatusNotFound).JSON(&fiber.Map{
+				"success": false,
+				"error":   errGet.Error(),
+			})
 		}
 
 		return c.JSON(data)
@@ -96,7 +113,10 @@ func (s *ServerFiber) handleGetCompanies() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		company, errNew := NewCompanyEmpty(s.repo)
 		if errNew != nil {
-			return c.Status(http.StatusInternalServerError).SendString(errNew.Error() + "\n")
+			return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+				"success": false,
+				"error":   errNew.Error(),
+			})
 		}
 
 		data := company.RepoGetCompanies()
@@ -110,19 +130,28 @@ func (s *ServerFiber) handleUpdateCompany() fiber.Handler {
 		var data CompanyData
 
 		if errBody := c.BodyParser(&data); errBody != nil {
-			return c.Status(http.StatusBadRequest).SendString(errBody.Error() + "\n")
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"success": false,
+				"error":   errBody.Error(),
+			})
 		}
 
 		if errValid := data.IsValid(); errValid != nil {
-			return c.Status(http.StatusBadRequest).SendString(errValid.Error() + "\n")
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"success": false,
+				"error":   errValid.Error(),
+			})
 		}
 
 		company, errNew := NewCompany(&data, s.repo)
 		if errNew != nil {
-			return c.Status(http.StatusBadRequest).SendString(errNew.Error() + "\n")
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"success": false,
+				"error":   errNew.Error(),
+			})
 		}
 
-		return c.Status(http.StatusBadRequest).SendString(company.RepoUpdateCompany().Error() + "\n")
+		return c.Status(http.StatusOK).SendString(company.RepoUpdateCompany().Error() + "\n")
 	}
 }
 
@@ -131,24 +160,38 @@ func (s *ServerFiber) handleDeleteCompany() fiber.Handler {
 		idRequest := c.Params("id")
 		idCompany, errReq := strconv.Atoi(idRequest)
 		if errReq != nil {
-			return c.Status(http.StatusBadRequest).SendString(errReq.Error() + "\n")
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"success": false,
+				"error":   errReq.Error(),
+			})
 		}
 
 		if idCompany < 1 {
-			return c.Status(http.StatusBadRequest).SendString("company ID should at least 1" + "\n")
+			return c.Status(http.StatusBadRequest).JSON(&fiber.Map{
+				"success": false,
+				"error":   "company ID should at least 1",
+			})
 		}
 
 		company, errNew := NewCompanyEmpty(s.repo)
 		if errNew != nil {
-			return c.Status(http.StatusInternalServerError).SendString(errNew.Error() + "\n")
+			return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+				"success": false,
+				"error":   errNew.Error(),
+			})
 		}
 
 		errDel := company.RepoDeleteCompany(uint(idCompany))
 		if errDel != nil {
-			return c.Status(http.StatusOK).SendString(errDel.Error() + "\n")
+			return c.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+				"success": false,
+				"error":   errDel.Error(),
+			})
 		}
 
-		return c.SendStatus(http.StatusNoContent)
+		return c.Status(http.StatusOK).JSON(&fiber.Map{
+			"success": true,
+		})
 	}
 }
 
