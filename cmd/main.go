@@ -1,28 +1,29 @@
 package main
 
 import (
-	"fibercrud/domain"
-	"fibercrud/infra"
-	rest "fibercrud/infra/http"
-	repo "fibercrud/repository"
 	"fmt"
 	"os"
+
+	"github.com/TudorHulban/fibercrud/domain"
+	"github.com/TudorHulban/fibercrud/infra"
+	rest "github.com/TudorHulban/fibercrud/infra/http"
+	repo "github.com/TudorHulban/fibercrud/repository"
 )
 
 func main() {
 	infra.Initialization()
 
-	repo, errNew := repo.NewRepoCompany()
+	repository, errNew := repo.NewRepoCompany()
 	if errNew != nil {
 		fmt.Printf("NewRepoCompany: %s", errNew.Error())
 		os.Exit(1)
 	}
 
-	defer repo.DBConn.Close()
+	defer repository.DBConn.Close()
 
-	repo.Migration(&domain.CompanyData{})
+	repository.Migration(&domain.CompanyData{})
 
-	fiber := rest.NewFiber(repo)
+	fiber := rest.NewFiber(repository)
 	defer fiber.Stop()
 
 	fiber.Start()

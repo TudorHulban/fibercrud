@@ -1,14 +1,15 @@
 package rest
 
 import (
-	"fibercrud/domain"
-	"fibercrud/infra"
-	"fibercrud/infra/auth"
-	"fibercrud/infra/pubk"
-	repo "fibercrud/repository"
 	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/TudorHulban/fibercrud/domain"
+	"github.com/TudorHulban/fibercrud/infra"
+	"github.com/TudorHulban/fibercrud/infra/auth"
+	"github.com/TudorHulban/fibercrud/infra/pubk"
+	repo "github.com/TudorHulban/fibercrud/repository"
 
 	"github.com/gofiber/fiber/v2"
 )

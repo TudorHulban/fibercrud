@@ -2,11 +2,11 @@ package auth
 
 import (
 	"errors"
-	"fibercrud/infra"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 
+	"github.com/TudorHulban/fibercrud/infra"
 	"github.com/tidwall/gjson"
 )
 

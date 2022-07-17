@@ -1,4 +1,15 @@
+# CRUD with Fiber
 ## How To
+Domain model is `company` defined as
+```go
+type CompanyData struct {
+	Code    string 
+	Name    string 
+	Country string 
+	Website string 
+	Phone   string
+}
+```
 Add company:
 ```sh
 curl -X POST -H "Content-Type: application/json" --data "{\"code\": \"J1234\", \"name\": \"avata\", \"country\": \"Fidji\", \"website\": \"avata.fj\", \"phone\": \"+55 12345\"}" http://localhost:3000/api/v1/company
@@ -15,10 +26,6 @@ Update company with ID = 1, change in field code:
 ```sh
 curl -X PUT -H "Content-Type: application/json" --data "{\"id\": 1,\"code\": \"Jxxxx\", \"name\": \"avata\", \"country\": \"Fidji\", \"website\": \"avata.fj\", \"phone\": \"+55 12345\"}" http://localhost:3000/api/v1/company
 ```
-See also: 
-```html
-https://stackoverflow.com/questions/39333102/how-to-create-or-update-a-record-with-gorm
-```
 Delete company with ID = 1:
 ```sh
 curl -X DELETE http://localhost:3000/api/v1/company/1
@@ -32,29 +39,17 @@ example: send same creation twice
 ### Setup golangci linter
 ### Check or improve the memory allignment of structs
 ### Move database connection as singleton
-### Split into packages
 ### Configuration load
+example: urfave
 ### Create interface for repo
 ### Improve app shutdown
 ### Diminish exported objects / variables
 ### Model validation
-### Logging
+### Structured Logging
+example: https://github.com/TudorHulban/log
 ### Assess for SQL injection
 ### Move to constants error messages
 ### Less Code duplication
-### IP service
-Received:
-```json
-{
-    "error": true,
-    "reason": "RateLimited",
-    "message": "Visit https://ipapi.co/ratelimited/ for details"
-}
-```
-see:
-```html
-https://github.com/gofiber/recipes/tree/master/geoip
-```
 ### Context timeout for IP service
 ### Fiber protection middlewares
 ### Move tests to table driven tests

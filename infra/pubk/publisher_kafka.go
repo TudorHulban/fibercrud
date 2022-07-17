@@ -1,6 +1,6 @@
 package pubk
 
-import "fibercrud/infra"
+import "github.com/TudorHulban/fibercrud/infra"
 
 type PublisherToKafka struct{}
 

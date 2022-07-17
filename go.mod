@@ -1,4 +1,4 @@
-module fibercrud
+module github.com/TudorHulban/fibercrud
 
 go 1.18
 

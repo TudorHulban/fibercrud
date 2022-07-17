@@ -1,13 +1,14 @@
 package rest
 
 import (
-	"fibercrud/domain"
-	"fibercrud/infra"
-	repo "fibercrud/repository"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/TudorHulban/fibercrud/domain"
+	"github.com/TudorHulban/fibercrud/infra"
+	repo "github.com/TudorHulban/fibercrud/repository"
 
 	"github.com/gofiber/fiber/v2/utils"
 	"github.com/stretchr/testify/require"

@@ -2,8 +2,9 @@ package domain
 
 import (
 	"errors"
-	repo "fibercrud/repository"
 	"fmt"
+
+	repo "github.com/TudorHulban/fibercrud/repository"
 )
 
 type Company struct {

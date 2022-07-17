@@ -1,8 +1,9 @@
 package infra
 
 import (
-	repo "fibercrud/repository"
 	"os"
+
+	repo "github.com/TudorHulban/fibercrud/repository"
 )
 
 func Initialization() {
